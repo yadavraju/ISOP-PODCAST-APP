@@ -7,8 +7,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.navigate
-import androidx.navigation.compose.popUpTo
 import com.isop.podcastapp.ui.common.PreviewContent
 import com.isop.podcastapp.ui.navigation.Destination
 import com.isop.podcastapp.ui.navigation.Navigator
