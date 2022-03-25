@@ -3,19 +3,21 @@ package com.isop.podcastapp.data.exoplayer
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
+import android.util.Log
 import androidx.core.net.toUri
 import com.isop.podcastapp.domain.model.Episode
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class PodcastMediaSource @Inject constructor() {
     var mediaMetadataEpisodes: List<MediaMetadataCompat> = emptyList()
-    var podcastEpisodes: List<Episode> = emptyList()
+    var podcastEpisodes: List<Item> = emptyList()
         private set
     private val onReadyListeners = mutableListOf<OnReadyListener>()
 
@@ -37,22 +39,23 @@ class PodcastMediaSource @Inject constructor() {
     private val isReady: Boolean
         get() = state == MusicSourceState.INITIALIZED
 
-    fun setEpisodes(data: List<Episode>) {
+    fun setEpisodes(data: List<Item>) {
         state = MusicSourceState.INITIALIZING
         podcastEpisodes = data
         mediaMetadataEpisodes = data.map { episode ->
+            Log.e("Raju", "backgroundImage: "+episode.image)
             MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode.id)
                 .putString(
                     MediaMetadataCompat.METADATA_KEY_ARTIST,
-                    episode.podcast.publisherOriginal
+                    episode.type
                 )
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, episode.titleOriginal)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, episode.headline)
                 .putString(
                     MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE,
-                    episode.podcast.titleOriginal
+                    episode.headline
                 )
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.audio)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.url)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, episode.image)
                 .build()
         }

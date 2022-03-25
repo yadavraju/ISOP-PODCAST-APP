@@ -33,6 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import coil.compose.LocalImageLoader
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.isop.podcastapp.R
 import com.isop.podcastapp.domain.model.Episode
@@ -43,6 +45,7 @@ import com.isop.podcastapp.ui.common.PreviewContent
 import com.isop.podcastapp.ui.common.ViewModelProvider
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.systemBarsPadding
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -68,7 +71,7 @@ fun PodcastPlayerScreen(backDispatcher: OnBackPressedDispatcher) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PodcastPlayerBody(episode: Episode, backDispatcher: OnBackPressedDispatcher) {
+fun PodcastPlayerBody(episode: Item, backDispatcher: OnBackPressedDispatcher) {
     val podcastPlayer = ViewModelProvider.podcastPlayer
     val swipeableState = rememberSwipeableState(0)
     val endAnchor = LocalConfiguration.current.screenHeightDp * LocalDensity.current.density
@@ -99,7 +102,13 @@ fun PodcastPlayerBody(episode: Episode, backDispatcher: OnBackPressedDispatcher)
         }
         .build()
 
-    val imagePainter = rememberCoilPainter(request = imageRequest)
+    val imagePainter = rememberImagePainter(
+        data = imageRequest,
+        imageLoader = LocalImageLoader.current,
+        builder = {
+            placeholder(0)
+        }
+    )
 
     val iconResId =
         if (podcastPlayer.podcastIsPlaying) R.drawable.ic_round_pause else R.drawable.ic_round_play_arrow
@@ -108,7 +117,8 @@ fun PodcastPlayerBody(episode: Episode, backDispatcher: OnBackPressedDispatcher)
 
     var localSliderValue by remember { mutableStateOf(0f) }
 
-    val sliderProgress = if (sliderIsChanging) localSliderValue else podcastPlayer.currentEpisodeProgress
+    val sliderProgress =
+        if (sliderIsChanging) localSliderValue else podcastPlayer.currentEpisodeProgress
 
     Box(
         modifier = Modifier
@@ -174,7 +184,7 @@ fun PodcastPlayerBody(episode: Episode, backDispatcher: OnBackPressedDispatcher)
 
 @Composable
 fun PodcastPlayerSatelessContent(
-    episode: Episode,
+    episode: Item,
     imagePainter: Painter,
     gradientColor: Color,
     yOffset: Int,
@@ -188,7 +198,7 @@ fun PodcastPlayerSatelessContent(
     onTooglePlayback: () -> Unit,
     onSliderChange: (Float) -> Unit,
     onSliderChangeFinished: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
 ) {
     val gradientColors = if (darkTheme) {
         listOf(gradientColor, MaterialTheme.colors.background)
@@ -258,7 +268,7 @@ fun PodcastPlayerSatelessContent(
                         }
 
                         Text(
-                            episode.titleOriginal,
+                            episode.headline,
                             style = MaterialTheme.typography.h5,
                             color = MaterialTheme.colors.onBackground,
                             maxLines = 1,
@@ -266,7 +276,7 @@ fun PodcastPlayerSatelessContent(
                         )
 
                         Text(
-                            episode.podcast.titleOriginal,
+                            episode.headline,
                             style = MaterialTheme.typography.subtitle1,
                             color = MaterialTheme.colors.onBackground,
                             maxLines = 1,
@@ -349,18 +359,17 @@ fun PodcastPlayerSatelessContent(
 fun PodcastPlayerPreview() {
     PreviewContent(darkTheme = true) {
         PodcastPlayerSatelessContent(
-            episode = Episode(
+            episode = Item(
                 "1",
                 "",
                 "",
+                123,
                 "",
-                Podcast("", "", "", "This is podcast title", "", "This is publisher"),
+                "0",
+                true,
                 "",
-                0,
-                "This is a title",
                 "",
-                2700,
-                false,
+                "",
                 "This is a description"
             ),
             imagePainter = painterResource(id = R.drawable.ic_microphone),

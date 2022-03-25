@@ -5,6 +5,9 @@ import com.isop.podcastapp.data.datastore.PodcastDataStore
 import com.isop.podcastapp.data.exoplayer.PodcastMediaSource
 import com.isop.podcastapp.data.network.client.EspnPodcastAPIClient
 import com.isop.podcastapp.data.network.client.ListenNotesAPIClient
+import com.isop.podcastapp.data.network.constant.ESPN_BASE_URL
+import com.isop.podcastapp.data.network.constant.PODCAST_LIST_DETAIL_BASE_URL
+import com.isop.podcastapp.data.network.service.EspnPodcastListDetailService
 import com.isop.podcastapp.data.network.service.EspnPodcastService
 import com.isop.podcastapp.data.network.service.PodcastService
 import com.isop.podcastapp.data.service.MediaPlayerServiceConnection
@@ -36,11 +39,20 @@ object AppModule {
     @Provides
     fun provideEspnHttpClient(): OkHttpClient = EspnPodcastAPIClient.createHttpClient()
 
+    //@Named("ESPN_FAN_API")
     @Provides
     @Singleton
     fun provideEspnPodcastService(
         @Named("ESPN") client: OkHttpClient,
-    ): EspnPodcastService = EspnPodcastAPIClient.createPodcastService(client)
+    ): EspnPodcastService = EspnPodcastAPIClient.createPodcastService(client, ESPN_BASE_URL)
+
+    //@Named("ESPN_API")
+    @Provides
+    @Singleton
+    fun provideEspnPodcastListService(
+        @Named("ESPN") client: OkHttpClient,
+    ): EspnPodcastListDetailService =
+        EspnPodcastAPIClient.createPodcastListDetailService(client, PODCAST_LIST_DETAIL_BASE_URL)
 
     @Provides
     @Singleton
@@ -53,8 +65,9 @@ object AppModule {
     fun providePodcastRepository(
         service: PodcastService,
         dataStore: PodcastDataStore,
-        espnService: EspnPodcastService
-    ): PodcastRepository = PodcastRepositoryImpl(service, dataStore, espnService)
+        espnService: EspnPodcastService,
+        espnListService: EspnPodcastListDetailService,
+    ): PodcastRepository = PodcastRepositoryImpl(service, dataStore, espnService, espnListService)
 
     @Provides
     @Singleton

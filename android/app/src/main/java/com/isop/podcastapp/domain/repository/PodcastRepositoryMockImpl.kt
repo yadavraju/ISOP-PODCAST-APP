@@ -1,5 +1,6 @@
 package com.isop.podcastapp.domain.repository
 
+import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
 import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
 import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.domain.model.Podcast
@@ -20,6 +21,10 @@ class PodcastRepositoryMockImpl : PodcastRepository {
     }
 
     override suspend fun getPodcastsList(): Either<Failure, EspnPodcastListDto> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getPodcastsListDetail(showId: String): Either<Failure, PodcastDetail> {
         TODO("Not yet implemented")
     }
 

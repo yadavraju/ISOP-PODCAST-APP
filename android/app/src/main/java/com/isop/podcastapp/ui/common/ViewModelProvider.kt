@@ -2,6 +2,7 @@ package com.isop.podcastapp.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.isop.podcastapp.ui.viewmodel.PodcastDetailViewModel
@@ -43,14 +44,14 @@ fun ProvideMultiViewModel(content: @Composable () -> Unit) {
     }
 }
 
-private val LocalPodcastSearchViewModel = staticCompositionLocalOf<PodcastSearchViewModel> {
+private val LocalPodcastSearchViewModel = compositionLocalOf<PodcastSearchViewModel> {
     error("No PodcastSearchViewModel provided")
 }
 
-private val LocalPodcastDetailViewModel = staticCompositionLocalOf<PodcastDetailViewModel> {
+private val LocalPodcastDetailViewModel = compositionLocalOf<PodcastDetailViewModel> {
     error("No PodcastDetailViewModel provided")
 }
 
-private val LocalPodcastPlayerViewModel = staticCompositionLocalOf<PodcastPlayerViewModel> {
+private val LocalPodcastPlayerViewModel = compositionLocalOf<PodcastPlayerViewModel> {
     error("No PodcastPlayerViewModel provided")
 }

@@ -31,7 +31,8 @@ fun PodcastDetailScreen(
     val podcastSearchViewModel = ViewModelProvider.podcastSearch
     val detailViewModel = ViewModelProvider.podcastDetail
     val playerViewModel = ViewModelProvider.podcastPlayer
-    val podcast = podcastSearchViewModel.getPodcastDetail(podcastId)
+    val podcast = podcastSearchViewModel.getPodcastListDetail(podcastId)
+    val contentDetails = podcastSearchViewModel.getPodcastListContentDetail()
     val currentContext = LocalContext.current
 
     Surface {
@@ -57,26 +58,30 @@ fun PodcastDetailScreen(
                         .padding(bottom = if (playerViewModel.currentPlayingEpisode.value != null) 64.dp else 0.dp)
 
                 ) {
-                    PodcastImage(
-                        url = podcast.image,
-                        modifier = Modifier.height(120.dp)
-                    )
+                    contentDetails?.background?.let {
+                        PodcastImage(
+                            url = it,
+                            modifier = Modifier.height(120.dp)
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Text(
-                        podcast.titleOriginal,
+                        podcast.headline,
                         style = MaterialTheme.typography.h1
                     )
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        podcast.podcast.publisherOriginal,
+                        podcast.type,
                         style = MaterialTheme.typography.body1
                     )
 
                     EmphasisText(
-                        text = "${podcast.pubDateMS.formatMillisecondsAsDate("MMM dd")} • ${podcast.audioLengthSec.toDurationMinutes()}"
+                        text = "${podcast.published.format("MMM dd")} • ${
+                            podcast.duration.toLong().toDurationMinutes()
+                        }"
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -86,10 +91,12 @@ fun PodcastDetailScreen(
                             text = playButtonText,
                             height = 48.dp
                         ) {
-                            playerViewModel.playPodcast(
-                                (podcastSearchViewModel.podcastSearch as Resource.Success).data.results,
-                                podcast
-                            )
+                            contentDetails?.items?.let {
+                                playerViewModel.playPodcast(
+                                    it,
+                                    podcast
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.weight(1f))
@@ -111,7 +118,7 @@ fun PodcastDetailScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    EmphasisText(text = podcast.descriptionOriginal)
+                    EmphasisText(text = podcast.description)
                 }
             }
         }

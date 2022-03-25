@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.isop.podcastapp.ui.common.PreviewContent
 import com.isop.podcastapp.ui.navigation.Destination
 import com.isop.podcastapp.ui.navigation.Navigator
@@ -22,7 +23,10 @@ fun WelcomeScreen() {
 
     WelcomeScreenContent(visible = visible) {
         navController.navigate(Destination.home) {
-            popUpTo(Destination.welcome) { inclusive = true }
+            popUpTo(Destination.welcome) {
+                saveState = true
+                inclusive = true
+            }
         }
     }
 }
@@ -30,7 +34,7 @@ fun WelcomeScreen() {
 @Composable
 fun WelcomeScreenContent(
     visible: Boolean,
-    onGetStarted: () -> Unit
+    onGetStarted: () -> Unit,
 ) {
     Surface {
         Column(

@@ -1,5 +1,6 @@
 package com.isop.podcastapp.ui.podcast
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -27,16 +28,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.isop.podcastapp.R
-import com.isop.podcastapp.domain.model.Episode
-import com.isop.podcastapp.domain.model.Podcast
-import com.isop.podcastapp.ui.common.PreviewContent
-import com.isop.podcastapp.ui.common.ViewModelProvider
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.LocalImageLoader
+import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
+import com.isop.podcastapp.R
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
+import com.isop.podcastapp.ui.common.ViewModelProvider
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -58,7 +57,7 @@ fun PodcastBottomBar(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PodcastBottomBarContent(episode: Episode) {
+fun PodcastBottomBarContent(episode: Item) {
     val swipeableState = rememberSwipeableState(0)
     val podcastPlayer = ViewModelProvider.podcastPlayer
 
@@ -103,7 +102,7 @@ fun PodcastBottomBarContent(episode: Episode) {
 
 @Composable
 fun PodcastBottomBarStatelessContent(
-    episode: Episode,
+    episode: Item,
     xOffset: Int,
     darkTheme: Boolean,
     @DrawableRes icon: Int,
@@ -126,8 +125,15 @@ fun PodcastBottomBarStatelessContent(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Log.e("Raju", "backgroundImage1: "+episode.image)
             Image(
-                painter = rememberCoilPainter(episode.thumbnail),
+                painter = rememberImagePainter(
+                    data = episode.image,
+                    imageLoader = LocalImageLoader.current,
+                    builder = {
+                        placeholder(0)
+                    }
+                ),
                 contentDescription = stringResource(R.string.podcast_thumbnail),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(64.dp),
@@ -141,7 +147,7 @@ fun PodcastBottomBarStatelessContent(
                     .padding(8.dp),
             ) {
                 Text(
-                    episode.titleOriginal,
+                    episode.headline,
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.onBackground,
                     maxLines = 1,
@@ -149,7 +155,7 @@ fun PodcastBottomBarStatelessContent(
                 )
 
                 Text(
-                    episode.podcast.titleOriginal,
+                    episode.headline,
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.onBackground,
                     maxLines = 1,
@@ -172,34 +178,6 @@ fun PodcastBottomBarStatelessContent(
                     .padding(6.dp)
             )
         }
-    }
-}
-
-@Preview(name = "Bottom Bar")
-@Composable
-fun PodcastBottomBarPreview() {
-    PreviewContent(darkTheme = true) {
-        PodcastBottomBarStatelessContent(
-            episode = Episode(
-                "1",
-                "",
-                "",
-                "https://picsum.photos/200",
-                Podcast("", "", "", "This is podcast title", "", "This is publisher"),
-                "https://picsum.photos/200",
-                0,
-                "This is a title",
-                "",
-                2700,
-                false,
-                "This is a description"
-            ),
-            xOffset = 0,
-            darkTheme = true,
-            icon = R.drawable.ic_round_play_arrow,
-            onTooglePlaybackState = { },
-            onTap = { }
-        )
     }
 }
 

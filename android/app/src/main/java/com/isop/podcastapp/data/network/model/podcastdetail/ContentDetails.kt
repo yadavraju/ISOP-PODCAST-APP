@@ -1,10 +1,10 @@
 package com.isop.podcastapp.data.network.model.podcastdetail
 import com.google.gson.annotations.SerializedName
 
-data class Content(
+data class ContentDetails(
     val alerts: List<Alert>,
     val background: String,
-    val id: Int,
+    val id: String,
     val items: List<Item>,
     val premium: Boolean,
     val share: Share,

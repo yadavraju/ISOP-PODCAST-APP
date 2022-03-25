@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
+import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
 import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
 import com.isop.podcastapp.domain.model.PodcastSearch
 import kotlinx.coroutines.flow.first
@@ -38,6 +39,22 @@ class PodcastDataStore(
         return context.podcastDataStore.data.map { preferences ->
             val jsonString = preferences[podcastSearchResult]
             Gson().fromJson(jsonString, EspnPodcastListDto::class.java)
+        }.first()
+    }
+
+    suspend fun storePodcastListDetailResult(data: PodcastDetail) {
+        context.podcastDataStore.edit { preferences ->
+            val jsonString = Gson().toJson(data)
+            Log.i(TAG, jsonString)
+            preferences[lastAPIFetchMillis] = Instant.now().toEpochMilli()
+            preferences[podcastSearchResult] = jsonString
+        }
+    }
+
+    suspend fun readLastPodcastListDetailResult(): PodcastDetail {
+        return context.podcastDataStore.data.map { preferences ->
+            val jsonString = preferences[podcastSearchResult]
+            Gson().fromJson(jsonString, PodcastDetail::class.java)
         }.first()
     }
 

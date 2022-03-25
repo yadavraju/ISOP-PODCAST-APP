@@ -11,12 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.isop.podcastapp.data.network.model.podcastdetail.ContentDetails
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.data.network.model.podcastlist.Content
 import com.isop.podcastapp.ui.podcast.PodcastImage
 
 @Composable
-fun PodcastView(
-    podcast: Content,
+fun PodcastListDetailView(
+    podcast: ContentDetails,
+    item: Item,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -27,11 +30,11 @@ fun PodcastView(
             .clickable(onClick = onClick),
     ) {
         PodcastImage(
-            url = if (isSystemInDarkTheme()) podcast.podcast.imageDark else podcast.podcast.image,
+            url = if (isSystemInDarkTheme()) podcast.showLogoDark else podcast.showLogo,
             aspectRatio = 1f
         )
         Text(
-            podcast.podcast.headline,
+            item.headline,
             style = MaterialTheme.typography.body1,
             modifier = Modifier.padding(8.dp)
         )

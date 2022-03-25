@@ -2,6 +2,7 @@ package com.isop.podcastapp.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -21,6 +22,6 @@ fun ProvideNavHostController(content: @Composable () -> Unit) {
     )
 }
 
-private val LocalNavHostController = staticCompositionLocalOf<NavHostController> {
+private val LocalNavHostController = compositionLocalOf<NavHostController> {
     error("No NavHostController provided")
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.isop.podcastapp.R
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.domain.model.Episode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,15 +13,15 @@ import javax.inject.Inject
 @HiltViewModel
 class PodcastDetailViewModel @Inject constructor() : ViewModel() {
 
-    fun sharePodcastEpisode(context: Context, episode: Episode) {
+    fun sharePodcastEpisode(context: Context, episode: Item) {
         val text = context.getString(
             R.string.share_podcast_content,
-            episode.titleOriginal,
-            episode.listennotesURL
+            episode.headline,
+            episode.url
         )
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TITLE, episode.titleOriginal)
+            putExtra(Intent.EXTRA_TITLE, episode.headline)
             putExtra(Intent.EXTRA_TEXT, text)
             type = "text/plain"
         }
@@ -29,8 +30,8 @@ class PodcastDetailViewModel @Inject constructor() : ViewModel() {
         context.startActivity(shareIntent)
     }
 
-    fun openListenNotesURL(context: Context, episode: Episode) {
-        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(episode.link))
+    fun openListenNotesURL(context: Context, episode: Item) {
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(episode.url))
         context.startActivity(webIntent)
     }
 }

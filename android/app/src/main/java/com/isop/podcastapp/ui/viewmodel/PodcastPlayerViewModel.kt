@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.palette.graphics.Palette
 import com.isop.podcastapp.constant.Constant
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.data.service.MediaPlayerService
 import com.isop.podcastapp.data.service.MediaPlayerServiceConnection
 import com.isop.podcastapp.domain.model.Episode
@@ -25,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PodcastPlayerViewModel @Inject constructor(
-    private val serviceConnection: MediaPlayerServiceConnection
+    private val serviceConnection: MediaPlayerServiceConnection,
 ) : ViewModel() {
 
     val currentPlayingEpisode = serviceConnection.currentPlayingEpisode
@@ -56,16 +57,16 @@ class PodcastPlayerViewModel @Inject constructor(
     private val currentEpisodeDuration: Long
         get() = MediaPlayerService.currentDuration
 
-    fun playPodcast(episodes: List<Episode>, currentEpisode: Episode) {
+    fun playPodcast(episodes: List<Item>, currentEpisode: Item) {
         serviceConnection.playPodcast(episodes)
-        if (currentEpisode.id == currentPlayingEpisode.value?.id) {
+        if (currentEpisode.id.toString() == currentPlayingEpisode.value?.id.toString()) {
             if (podcastIsPlaying) {
                 serviceConnection.transportControls.pause()
             } else {
                 serviceConnection.transportControls.play()
             }
         } else {
-            serviceConnection.transportControls.playFromMediaId(currentEpisode.id, null)
+            serviceConnection.transportControls.playFromMediaId(currentEpisode.id.toString(), null)
         }
     }
 

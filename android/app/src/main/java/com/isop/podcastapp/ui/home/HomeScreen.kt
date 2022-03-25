@@ -1,5 +1,6 @@
 package com.isop.podcastapp.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.navigationBarsPadding
 import com.isop.podcastapp.data.network.model.podcastlist.Content
@@ -17,6 +19,7 @@ import com.isop.podcastapp.ui.common.StaggeredVerticalGrid
 import com.isop.podcastapp.ui.common.ViewModelProvider
 import com.isop.podcastapp.ui.navigation.Destination
 import com.isop.podcastapp.ui.navigation.Navigator
+import com.isop.podcastapp.ui.viewmodel.PodcastSearchViewModel
 import com.isop.podcastapp.util.Resource
 
 @Composable
@@ -25,7 +28,7 @@ fun HomeScreen() {
     val navController = Navigator.current
     val podcastSearchViewModel = ViewModelProvider.podcastSearch
     val podcastList = podcastSearchViewModel.podcastList
-
+    Log.e("Raju", "HomeScreen: ")
     Surface {
         LazyColumn(state = scrollState) {
             item {
@@ -57,7 +60,9 @@ fun HomeScreen() {
                                     podcast = podcast,
                                     modifier = Modifier.padding(bottom = 16.dp)
                                 ) {
-                                    openPodcastDetail(navController, podcast)
+                                    openPodcastDetail(navController,
+                                        podcast.id.toString(),
+                                        podcastSearchViewModel)
                                 }
                             }
                         }
@@ -79,9 +84,21 @@ fun HomeScreen() {
 
 private fun openPodcastDetail(
     navController: NavHostController,
-    podcast: Content,
+    id: String,
+    podcastSearchViewModel: PodcastSearchViewModel,
 ) {
-    navController.navigate(Destination.podcast(podcast.id.toString())) { }
+    navController.navigate(Destination.podcast(id)) {
+        popUpTo(navController.graph.findStartDestination().id) {
+            saveState = true
+        }
+        // Avoid multiple copies of the same destination when
+        // re selecting the same item
+        launchSingleTop = true
+        // Restore state when re selecting a previously selected item
+        restoreState = true
+        Log.e("Raju", "Api call")
+        podcastSearchViewModel.getPodcastsListDetail(id)
+    }
 }
 
 @Composable
