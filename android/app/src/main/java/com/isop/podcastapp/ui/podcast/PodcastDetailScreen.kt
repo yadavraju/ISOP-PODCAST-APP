@@ -98,7 +98,7 @@ fun PodcastDetailScreen(
                             imageVector = Icons.Rounded.Share,
                             contentDescription = stringResource(R.string.share)
                         ) {
-                            detailViewModel.sharePodcastEpidose(currentContext, podcast)
+                            detailViewModel.sharePodcastEpisode(currentContext, podcast)
                         }
 
                         com.isop.podcastapp.ui.common.IconButton(

@@ -16,9 +16,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.ImagePainter
+import coil.compose.LocalImageLoader
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.isop.podcastapp.R
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.LoadPainterDefaults
 
 @Composable
 fun PodcastImage(
@@ -26,7 +31,13 @@ fun PodcastImage(
     modifier: Modifier = Modifier,
     aspectRatio: Float = 1f,
 ) {
-    val imagePainter = rememberCoilPainter(url)
+    val imagePainter = rememberImagePainter(
+        data = url,
+        imageLoader = LocalImageLoader.current,
+        builder = {
+            placeholder(0)
+        }
+    )
 
     Box(
         modifier
@@ -37,11 +48,11 @@ fun PodcastImage(
         Image(
             painter = imagePainter,
             contentDescription = stringResource(R.string.podcast_thumbnail),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize(),
         )
-        when (imagePainter.loadState) {
-            is ImageLoadState.Success -> {
+        when (imagePainter.state) {
+            is ImagePainter.State.Success -> {
                 // Remove placeholder
             }
             else -> {

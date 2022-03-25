@@ -20,7 +20,9 @@ import com.isop.podcastapp.ui.navigation.Navigator
 import com.isop.podcastapp.util.Resource
 
 @Composable
-fun HomeScreen() {
+fun PodcastListDetailScreen(
+    podcastId: String,
+) {
     val scrollState = rememberLazyListState()
     val navController = Navigator.current
     val podcastSearchViewModel = ViewModelProvider.podcastSearch
@@ -85,17 +87,17 @@ private fun openPodcastDetail(
 }
 
 @Composable
-@Preview(name = "Home")
-fun HomeScreenPreview() {
+@Preview(name = "Home1")
+fun PodcastListDetailScreenPreview() {
     PreviewContent {
-        HomeScreen()
+        PodcastListDetailScreen()
     }
 }
 
 @Composable
-@Preview(name = "Home (Dark)")
-fun HomeScreenDarkPreview() {
+@Preview(name = "Home1 (Dark)")
+fun PodcastListDetailScreenDarkPreview() {
     PreviewContent(darkTheme = true) {
-        HomeScreen()
+        PodcastListDetailScreen()
     }
 }

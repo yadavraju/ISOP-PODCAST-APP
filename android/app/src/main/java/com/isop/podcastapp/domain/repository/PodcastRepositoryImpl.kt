@@ -1,6 +1,8 @@
 package com.isop.podcastapp.domain.repository
 
 import com.isop.podcastapp.data.datastore.PodcastDataStore
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
+import com.isop.podcastapp.data.network.service.EspnPodcastService
 import com.isop.podcastapp.data.network.service.PodcastService
 import com.isop.podcastapp.domain.model.PodcastSearch
 import com.isop.podcastapp.error.Failure
@@ -10,7 +12,8 @@ import com.isop.podcastapp.util.right
 
 class PodcastRepositoryImpl(
     private val service: PodcastService,
-    private val dataStore: PodcastDataStore
+    private val dataStore: PodcastDataStore,
+    private val espnService: EspnPodcastService,
 ) : PodcastRepository {
 
     companion object {
@@ -19,7 +22,7 @@ class PodcastRepositoryImpl(
 
     override suspend fun searchPodcasts(
         query: String,
-        type: String
+        type: String,
     ): Either<Failure, PodcastSearch> {
         return try {
             val canFetchAPI = dataStore.canFetchAPI()
@@ -29,6 +32,21 @@ class PodcastRepositoryImpl(
                 right(result)
             } else {
                 right(dataStore.readLastPodcastSearchResult())
+            }
+        } catch (e: Exception) {
+            left(Failure.UnexpectedFailure)
+        }
+    }
+
+    override suspend fun getPodcastsList(): Either<Failure, EspnPodcastListDto> {
+        return try {
+            val canFetchAPI = dataStore.canFetchAPI()
+            if (canFetchAPI) {
+                val result = espnService.getPodcastsList()
+                dataStore.storePodcastListResult(result)
+                right(result)
+            } else {
+                right(dataStore.readLastPodcastListResult())
             }
         } catch (e: Exception) {
             left(Failure.UnexpectedFailure)

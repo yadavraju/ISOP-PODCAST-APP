@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PodcastDetailViewModel @Inject constructor() : ViewModel() {
 
-    fun sharePodcastEpidose(context: Context, episode: Episode) {
+    fun sharePodcastEpisode(context: Context, episode: Episode) {
         val text = context.getString(
             R.string.share_podcast_content,
             episode.titleOriginal,

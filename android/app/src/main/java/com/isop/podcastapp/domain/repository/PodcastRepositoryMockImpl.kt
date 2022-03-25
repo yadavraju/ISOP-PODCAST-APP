@@ -1,5 +1,6 @@
 package com.isop.podcastapp.domain.repository
 
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
 import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.domain.model.Podcast
 import com.isop.podcastapp.domain.model.PodcastSearch
@@ -16,6 +17,10 @@ class PodcastRepositoryMockImpl : PodcastRepository {
         delay(5000)
         //return left(Failure.UnexpectedFailure)
         return right(demoData())
+    }
+
+    override suspend fun getPodcastsList(): Either<Failure, EspnPodcastListDto> {
+        TODO("Not yet implemented")
     }
 
     private fun demoData(): PodcastSearch {

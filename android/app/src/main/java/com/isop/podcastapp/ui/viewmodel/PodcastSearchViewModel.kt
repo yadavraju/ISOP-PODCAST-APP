@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
 import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.domain.model.PodcastSearch
 import com.isop.podcastapp.domain.repository.PodcastRepository
@@ -15,14 +16,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PodcastSearchViewModel @Inject constructor(
-    private val repository: PodcastRepository
+    private val repository: PodcastRepository,
 ) : ViewModel() {
 
     var podcastSearch by mutableStateOf<Resource<PodcastSearch>>(Resource.Loading)
         private set
 
+    var podcastList by mutableStateOf<Resource<EspnPodcastListDto>>(Resource.Loading)
+        private set
+
     init {
-        searchPodcasts()
+        //searchPodcasts()
+        getPodcastsList()
     }
 
     fun getPodcastDetail(id: String): Episode? {
@@ -43,6 +48,21 @@ class PodcastSearchViewModel @Inject constructor(
                 },
                 { data ->
                     podcastSearch = Resource.Success(data)
+                }
+            )
+        }
+    }
+
+    fun getPodcastsList() {
+        viewModelScope.launch {
+            podcastList = Resource.Loading
+            val result = repository.getPodcastsList()
+            result.fold(
+                { failure ->
+                    podcastList = Resource.Error(failure)
+                },
+                { data ->
+                    podcastList = Resource.Success(data)
                 }
             )
         }
