@@ -1,5 +1,6 @@
 package com.isop.podcastapp.ui.home
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -21,13 +23,13 @@ import com.isop.podcastapp.util.Resource
 
 @Composable
 fun PodcastListDetailScreen(
-    podcastId: String,
+    podcastId: String
 ) {
     val scrollState = rememberLazyListState()
     val navController = Navigator.current
     val podcastSearchViewModel = ViewModelProvider.podcastSearch
     val podcastList = podcastSearchViewModel.podcastList
-
+    Toast.makeText( LocalContext.current, "Clicked: $podcastId", Toast.LENGTH_LONG).show()
     Surface {
         LazyColumn(state = scrollState) {
             item {
@@ -90,7 +92,7 @@ private fun openPodcastDetail(
 @Preview(name = "Home1")
 fun PodcastListDetailScreenPreview() {
     PreviewContent {
-        PodcastListDetailScreen()
+        PodcastListDetailScreen("1")
     }
 }
 
@@ -98,6 +100,6 @@ fun PodcastListDetailScreenPreview() {
 @Preview(name = "Home1 (Dark)")
 fun PodcastListDetailScreenDarkPreview() {
     PreviewContent(darkTheme = true) {
-        PodcastListDetailScreen()
+        PodcastListDetailScreen("1")
     }
 }

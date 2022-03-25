@@ -26,6 +26,7 @@ import com.isop.podcastapp.ui.podcast.PodcastPlayerScreen
 import com.isop.podcastapp.ui.theme.PodcastAppTheme
 import com.isop.podcastapp.ui.welcome.WelcomeScreen
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.isop.podcastapp.ui.home.PodcastListDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,7 +73,10 @@ fun PodcastApp(
                                 Destination.podcast,
                                 deepLinks = listOf(navDeepLink { uriPattern = "https://www.listennotes.com/e/{id}" })
                             ) { backStackEntry ->
-                                PodcastDetailScreen(
+//                                PodcastDetailScreen(
+//                                    podcastId = backStackEntry.arguments?.getString("id")!!,
+//                                )
+                                PodcastListDetailScreen(
                                     podcastId = backStackEntry.arguments?.getString("id")!!,
                                 )
                             }
