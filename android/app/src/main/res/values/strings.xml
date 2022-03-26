@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">ISOP Podcast</string>
+    <string name="app_name">ESPN-Podcast</string>
     <string name="get_started">Get Started</string>
-    <string name="welcome_title">Welcome to listen note \nPodcast</string>
+    <string name="welcome_title">Welcome to ESPN Podcast</string>
     <string name="trending_now">Trending Now</string>
     <string name="podcast_thumbnail">Podcast thumbnail</string>
     <string name="back">back</string>

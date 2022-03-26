@@ -44,9 +44,9 @@ fun WelcomeScreenContent(
         ) {
             AnimatedTitle(visible = visible)
 
-            AnimatedImage(visible = visible)
+            //AnimatedImage(visible = visible)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
             AnimatedButton(visible = visible, onClick = onGetStarted)
         }

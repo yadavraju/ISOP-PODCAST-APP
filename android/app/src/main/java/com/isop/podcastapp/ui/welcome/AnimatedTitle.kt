@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import com.isop.podcastapp.R
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -29,7 +30,8 @@ fun AnimatedTitle(visible: Boolean) {
         Text(
             text = stringResource(R.string.welcome_title),
             style = MaterialTheme.typography.h1,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = 24.sp
         )
     }
 }
