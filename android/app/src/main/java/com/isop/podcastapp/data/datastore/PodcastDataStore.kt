@@ -11,7 +11,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
 import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastList
-import com.isop.podcastapp.domain.model.PodcastSearch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.Instant
@@ -19,25 +18,19 @@ import java.time.Instant
 class PodcastDataStore(
     private val context: Context,
 ) {
-    private val lastAPIFetchMillis = longPreferencesKey("last_api_fetch_millis")
-    private val podcastSearchResult = stringPreferencesKey("podcast_search_result")
-
-    companion object {
-        private const val TAG = "PodcastDataStore"
-    }
 
     suspend fun storePodcastListResult(data: EspnPodcastList) {
         context.podcastDataStore.edit { preferences ->
             val jsonString = Gson().toJson(data)
             Log.i(TAG, jsonString)
-            preferences[lastAPIFetchMillis] = Instant.now().toEpochMilli()
-            preferences[podcastSearchResult] = jsonString
+            preferences[lastPodcastAPIFetchTime] = Instant.now().toEpochMilli()
+            preferences[podcastLisResult] = jsonString
         }
     }
 
     suspend fun readLastPodcastListResult(): EspnPodcastList {
         return context.podcastDataStore.data.map { preferences ->
-            val jsonString = preferences[podcastSearchResult]
+            val jsonString = preferences[podcastLisResult]
             Gson().fromJson(jsonString, EspnPodcastList::class.java)
         }.first()
     }
@@ -46,37 +39,23 @@ class PodcastDataStore(
         context.podcastDataStore.edit { preferences ->
             val jsonString = Gson().toJson(data)
             Log.i(TAG, jsonString)
-            preferences[lastAPIFetchMillis] = Instant.now().toEpochMilli()
-            preferences[podcastSearchResult] = jsonString
+            preferences[longPreferencesKey(lastPodcastAPIFetchKey + data.content.id)] =
+                Instant.now().toEpochMilli()
+            preferences[stringPreferencesKey(podcastListDetailKey + data.content.id)] =
+                jsonString
         }
     }
 
-    suspend fun readLastPodcastListDetailResult(): PodcastDetail {
+    suspend fun readLastPodcastListDetailResult(id: String): PodcastDetail {
         return context.podcastDataStore.data.map { preferences ->
-            val jsonString = preferences[podcastSearchResult]
+            val jsonString = preferences[stringPreferencesKey(podcastListDetailKey + id)]
             Gson().fromJson(jsonString, PodcastDetail::class.java)
         }.first()
     }
 
-    suspend fun storePodcastSearchResult(data: PodcastSearch) {
-        context.podcastDataStore.edit { preferences ->
-            val jsonString = Gson().toJson(data)
-            Log.i(TAG, jsonString)
-            preferences[lastAPIFetchMillis] = Instant.now().toEpochMilli()
-            preferences[podcastSearchResult] = jsonString
-        }
-    }
-
-    suspend fun readLastPodcastSearchResult(): PodcastSearch {
+    suspend fun canFetchAPI(key: Preferences.Key<Long>): Boolean {
         return context.podcastDataStore.data.map { preferences ->
-            val jsonString = preferences[podcastSearchResult]
-            Gson().fromJson(jsonString, PodcastSearch::class.java)
-        }.first()
-    }
-
-    suspend fun canFetchAPI(): Boolean {
-        return context.podcastDataStore.data.map { preferences ->
-            val epochMillis = preferences[lastAPIFetchMillis]
+            val epochMillis = preferences[key]
 
             return@map if (epochMillis != null) {
                 val minDiffMillis = 36 * 60 * 60 * 1000L
@@ -86,6 +65,14 @@ class PodcastDataStore(
                 true
             }
         }.first()
+    }
+
+    companion object {
+        private const val TAG = "PodcastDataStore"
+        const val lastPodcastAPIFetchKey = "lastPodcastAPIFetchKey"
+        const val podcastListDetailKey = "podcastListDetailResult"
+        private val podcastLisResult = stringPreferencesKey("podcastLisResult")
+        val lastPodcastAPIFetchTime = longPreferencesKey("lastPodcastAPIFetchTime")
     }
 }
 

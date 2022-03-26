@@ -9,8 +9,6 @@ import com.isop.podcastapp.data.network.model.podcastdetail.ContentDetails
 import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
 import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastList
-import com.isop.podcastapp.domain.model.Episode
-import com.isop.podcastapp.domain.model.PodcastSearch
 import com.isop.podcastapp.domain.repository.PodcastRepository
 import com.isop.podcastapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,9 +20,6 @@ class PodcastSearchViewModel @Inject constructor(
     private val repository: PodcastRepository,
 ) : ViewModel() {
 
-    var podcastSearch by mutableStateOf<Resource<PodcastSearch>>(Resource.Loading)
-        private set
-
     var podcastList by mutableStateOf<Resource<EspnPodcastList>>(Resource.Loading)
         private set
 
@@ -32,16 +27,7 @@ class PodcastSearchViewModel @Inject constructor(
         private set
 
     init {
-        //searchPodcasts()
         getPodcastsList()
-    }
-
-    fun getPodcastDetail(id: String): Episode? {
-        return when (podcastSearch) {
-            is Resource.Error -> null
-            Resource.Loading -> null
-            is Resource.Success -> (podcastSearch as Resource.Success<PodcastSearch>).data.results.find { it.id == id }
-        }
     }
 
     fun getPodcastListDetail(id: String): Item? {
@@ -57,21 +43,6 @@ class PodcastSearchViewModel @Inject constructor(
             is Resource.Error -> null
             Resource.Loading -> null
             is Resource.Success -> (podcastListDetail as Resource.Success<PodcastDetail>).data.content
-        }
-    }
-
-    fun searchPodcasts() {
-        viewModelScope.launch {
-            podcastSearch = Resource.Loading
-            val result = repository.searchPodcasts("fiction", "episode")
-            result.fold(
-                { failure ->
-                    podcastSearch = Resource.Error(failure)
-                },
-                { data ->
-                    podcastSearch = Resource.Success(data)
-                }
-            )
         }
     }
 
