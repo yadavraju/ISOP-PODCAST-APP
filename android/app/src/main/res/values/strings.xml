@@ -17,4 +17,5 @@
     <string name="close">Close</string>
     <string name="replay_10_seconds">Replay 10 seconds</string>
     <string name="forward_10_seconds">Forward 10 seconds</string>
+    <string name="home_post_min_read">%1$s - %2$d min</string>
 </resources>

@@ -1,28 +1,22 @@
 package com.isop.podcastapp.ui.home
 
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.isop.podcastapp.data.network.model.podcastdetail.Item
-import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
-import com.isop.podcastapp.data.network.model.podcastlist.Content
-import com.isop.podcastapp.ui.common.PreviewContent
-import com.isop.podcastapp.ui.common.StaggeredVerticalGrid
 import com.isop.podcastapp.ui.common.ViewModelProvider
 import com.isop.podcastapp.ui.navigation.Destination
 import com.isop.podcastapp.ui.navigation.Navigator
-import com.isop.podcastapp.ui.viewmodel.PodcastSearchViewModel
+import com.isop.podcastapp.ui.podcast.PodcastImage
 import com.isop.podcastapp.util.Resource
 
 @Composable
@@ -34,14 +28,8 @@ fun PodcastListDetailScreen(
     val podcastSearchViewModel = ViewModelProvider.podcastSearch
     val podcastListDetails = podcastSearchViewModel.podcastListDetail
 
-    Log.e("Raju", "PodcastListDetailId: $podcastId")
-
     Surface {
         LazyColumn(state = scrollState) {
-            item {
-                LargeTitle()
-            }
-
             when (podcastListDetails) {
                 is Resource.Error -> {
                     item {
@@ -57,19 +45,23 @@ fun PodcastListDetailScreen(
                 }
                 is Resource.Success -> {
                     item {
-                        StaggeredVerticalGrid(
-                            crossAxisCount = 2,
-                            spacing = 16.dp,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        ) {
-                            podcastListDetails.data.content.items.forEach { podcast ->
-                                PodcastListDetailView(
-                                    podcast = podcastListDetails.data.content,
-                                    item = podcast,
-                                    modifier = Modifier.padding(bottom = 16.dp)
-                                ) {
-                                    openPodcastDetail(navController, podcast)
-                                }
+                        PodcastImage(
+                            url = podcastListDetails.data.content.background,
+                            fitScaleType = false,
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.medium)
+                                .statusBarsPadding()
+                                .fillMaxWidth()
+                                .height(240.dp)
+                        )
+                    }
+                    item {
+                        podcastListDetails.data.content.items.forEach { podcast ->
+                            PodcastListDetailRowView(
+                                podcast = podcastListDetails.data.content,
+                                item = podcast
+                            ) {
+                                openPodcastDetail(navController, podcast)
                             }
                         }
                     }

@@ -28,6 +28,7 @@ import com.google.accompanist.imageloading.LoadPainterDefaults
 @Composable
 fun PodcastImage(
     url: String,
+    fitScaleType: Boolean = true,
     modifier: Modifier = Modifier,
     aspectRatio: Float = 1f,
 ) {
@@ -48,7 +49,7 @@ fun PodcastImage(
         Image(
             painter = imagePainter,
             contentDescription = stringResource(R.string.podcast_thumbnail),
-            contentScale = ContentScale.Fit,
+            contentScale = if (fitScaleType) ContentScale.Fit else ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
         when (imagePainter.state) {

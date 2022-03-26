@@ -96,7 +96,6 @@ private fun openPodcastDetail(
         launchSingleTop = true
         // Restore state when re selecting a previously selected item
         restoreState = true
-        Log.e("Raju", "Api call")
         podcastSearchViewModel.getPodcastsListDetail(id)
     }
 }

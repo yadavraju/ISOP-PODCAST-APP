@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.isop.podcastapp.R
 import com.isop.podcastapp.ui.common.BackButton
 import com.isop.podcastapp.ui.common.EmphasisText
@@ -61,20 +62,21 @@ fun PodcastDetailScreen(
                     contentDetails?.background?.let {
                         PodcastImage(
                             url = it,
-                            modifier = Modifier.height(120.dp)
+                            modifier =  Modifier.fillMaxHeight(),
+                            fitScaleType = false
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
                         podcast.headline,
-                        style = MaterialTheme.typography.h1
+                        style = MaterialTheme.typography.h1,
+                        fontSize = 24.sp
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        podcast.type,
+                        "${podcast.type} : ${podcast.cellType}",
                         style = MaterialTheme.typography.body1
                     )
 

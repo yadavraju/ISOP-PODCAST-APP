@@ -43,7 +43,6 @@ class PodcastMediaSource @Inject constructor() {
         state = MusicSourceState.INITIALIZING
         podcastEpisodes = data
         mediaMetadataEpisodes = data.map { episode ->
-            Log.e("Raju", "backgroundImage: "+episode.image)
             MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode.id)
                 .putString(
