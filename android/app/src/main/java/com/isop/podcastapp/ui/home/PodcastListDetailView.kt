@@ -23,7 +23,7 @@ import com.isop.podcastapp.util.toDurationMinutes
 @Composable
 fun PodcastListDetailRowView(
     podcast: ContentDetails,
-    post: Item,
+    item: Item,
     onClick: () -> Unit,
 ) {
     Row(
@@ -33,21 +33,21 @@ fun PodcastListDetailRowView(
     ) {
         PostImage(podcast, Modifier.padding(end = 16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            PostTitle(post)
-            AuthorAndReadTime(post)
+            PostTitle(item)
+            AuthorAndReadTime(item)
         }
     }
 }
 
 @Composable
 fun AuthorAndReadTime(
-    post: Item,
+    item: Item,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = post.type + " " + post.duration.toLong().toDurationMinutes(),
+                text = item.type + " " + item.duration.toLong().toDurationMinutes(),
                 style = MaterialTheme.typography.body2
             )
         }
@@ -55,9 +55,9 @@ fun AuthorAndReadTime(
 }
 
 @Composable
-fun PostImage(podcast: ContentDetails, modifier: Modifier = Modifier) {
+fun PostImage(details: ContentDetails, modifier: Modifier = Modifier) {
     PodcastImage(
-        url = if (isSystemInDarkTheme()) podcast.showLogoDark else podcast.showLogo,
+        url = if (isSystemInDarkTheme()) details.showLogoDark else details.showLogo,
         modifier = modifier
             .size(40.dp, 40.dp)
             .clip(MaterialTheme.shapes.small)
@@ -65,6 +65,6 @@ fun PostImage(podcast: ContentDetails, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PostTitle(post: Item) {
-    Text(post.headline, style = MaterialTheme.typography.subtitle1)
+fun PostTitle(item: Item) {
+    Text(item.headline, style = MaterialTheme.typography.subtitle1)
 }

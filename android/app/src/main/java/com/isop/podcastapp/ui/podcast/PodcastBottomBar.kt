@@ -1,6 +1,5 @@
 package com.isop.podcastapp.ui.podcast
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -41,9 +40,10 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PodcastBottomBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val episode = ViewModelProvider.podcastPlayer.currentPlayingEpisode.value
+
 
     AnimatedVisibility(
         visible = episode != null,
@@ -125,10 +125,9 @@ fun PodcastBottomBarStatelessContent(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Log.e("Raju", "backgroundImage1: "+episode.image)
             Image(
                 painter = rememberImagePainter(
-                    data = episode.image,
+                    data = ViewModelProvider.podcastSearch.getPodcastListContentDetail()?.showLogo,
                     imageLoader = LocalImageLoader.current,
                     builder = {
                         placeholder(0)

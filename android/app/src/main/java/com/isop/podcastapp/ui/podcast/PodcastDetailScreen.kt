@@ -18,8 +18,6 @@ import com.isop.podcastapp.ui.common.BackButton
 import com.isop.podcastapp.ui.common.EmphasisText
 import com.isop.podcastapp.ui.common.PrimaryButton
 import com.isop.podcastapp.ui.common.ViewModelProvider
-import com.isop.podcastapp.util.Resource
-import com.isop.podcastapp.util.formatMillisecondsAsDate
 import com.isop.podcastapp.util.toDurationMinutes
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -96,7 +94,8 @@ fun PodcastDetailScreen(
                             contentDetails?.items?.let {
                                 playerViewModel.playPodcast(
                                     it,
-                                    podcast
+                                    podcast,
+                                    contentDetails.showLogo
                                 )
                             }
                         }

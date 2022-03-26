@@ -59,7 +59,7 @@ fun PodcastListDetailScreen(
                         podcastListDetails.data.content.items.forEach { podcast ->
                             PodcastListDetailRowView(
                                 podcast = podcastListDetails.data.content,
-                                post = podcast
+                                item = podcast
                             ) {
                                 openPodcastDetail(navController, podcast)
                             }
@@ -84,5 +84,5 @@ private fun openPodcastDetail(
     navController: NavHostController,
     podcast: Item,
 ) {
-    navController.navigate(Destination.podcastDetail(podcast.id.toString())) { }
+    navController.navigate(Destination.podcastDetail(podcast.id)) { }
 }

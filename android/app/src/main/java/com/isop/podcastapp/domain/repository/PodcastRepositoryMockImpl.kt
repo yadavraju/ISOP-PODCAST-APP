@@ -1,7 +1,7 @@
 package com.isop.podcastapp.domain.repository
 
 import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
-import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastList
 import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.domain.model.Podcast
 import com.isop.podcastapp.domain.model.PodcastSearch
@@ -20,7 +20,7 @@ class PodcastRepositoryMockImpl : PodcastRepository {
         return right(demoData())
     }
 
-    override suspend fun getPodcastsList(): Either<Failure, EspnPodcastListDto> {
+    override suspend fun getPodcastsList(): Either<Failure, EspnPodcastList> {
         TODO("Not yet implemented")
     }
 

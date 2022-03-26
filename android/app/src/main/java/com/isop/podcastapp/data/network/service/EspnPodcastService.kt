@@ -1,11 +1,11 @@
 package com.isop.podcastapp.data.network.service
 
 import com.isop.podcastapp.data.network.constant.PODCAST_ID_LIST
-import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastList
 import retrofit2.http.GET
 
 interface EspnPodcastService {
 
     @GET(PODCAST_ID_LIST)
-    suspend fun getPodcastsList(): EspnPodcastListDto
+    suspend fun getPodcastsList(): EspnPodcastList
 }

@@ -1,6 +1,6 @@
 package com.isop.podcastapp.data.network.model.podcastlist
 
-data class EspnPodcastListDto(
+data class EspnPodcastList(
     val analytics: Analytics,
     val content: List<Content>,
 )

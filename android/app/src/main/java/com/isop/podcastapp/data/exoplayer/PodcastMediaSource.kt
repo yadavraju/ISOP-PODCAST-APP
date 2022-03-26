@@ -3,9 +3,7 @@ package com.isop.podcastapp.data.exoplayer
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
-import android.util.Log
 import androidx.core.net.toUri
-import com.isop.podcastapp.domain.model.Episode
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -39,7 +37,7 @@ class PodcastMediaSource @Inject constructor() {
     private val isReady: Boolean
         get() = state == MusicSourceState.INITIALIZED
 
-    fun setEpisodes(data: List<Item>) {
+    fun setEpisodes(data: List<Item>, showLogo: String) {
         state = MusicSourceState.INITIALIZING
         podcastEpisodes = data
         mediaMetadataEpisodes = data.map { episode ->
@@ -55,7 +53,7 @@ class PodcastMediaSource @Inject constructor() {
                     episode.headline
                 )
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.url)
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, episode.image)
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, showLogo)
                 .build()
         }
         state = MusicSourceState.INITIALIZED
@@ -67,7 +65,8 @@ class PodcastMediaSource @Inject constructor() {
             val mediaItem = MediaItem.fromUri(
                 metadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI).toUri()
             )
-            val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
+            val mediaSource =
+                ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
         return concatenatingMediaSource

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.isop.podcastapp.data.network.model.podcastdetail.ContentDetails
 import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
-import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastList
 import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.domain.model.PodcastSearch
 import com.isop.podcastapp.domain.repository.PodcastRepository
@@ -25,7 +25,7 @@ class PodcastSearchViewModel @Inject constructor(
     var podcastSearch by mutableStateOf<Resource<PodcastSearch>>(Resource.Loading)
         private set
 
-    var podcastList by mutableStateOf<Resource<EspnPodcastListDto>>(Resource.Loading)
+    var podcastList by mutableStateOf<Resource<EspnPodcastList>>(Resource.Loading)
         private set
 
     var podcastListDetail by mutableStateOf<Resource<PodcastDetail>>(Resource.Loading)

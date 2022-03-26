@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import com.isop.podcastapp.constant.Constant
 import com.isop.podcastapp.data.exoplayer.PodcastMediaSource
 import com.isop.podcastapp.data.network.model.podcastdetail.Item
-import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.util.currentPosition
 
 class MediaPlayerServiceConnection(
@@ -39,8 +38,8 @@ class MediaPlayerServiceConnection(
         connect()
     }
 
-    fun playPodcast(episodes: List<Item>) {
-        mediaSource.setEpisodes(episodes)
+    fun playPodcast(item: List<Item>, showLogo: String) {
+        mediaSource.setEpisodes(item, showLogo)
         mediaBrowser.sendCustomAction(Constant.START_MEDIA_PLAYBACK_ACTION, null, null)
     }
 
@@ -100,7 +99,7 @@ class MediaPlayerServiceConnection(
             super.onMetadataChanged(metadata)
             currentPlayingEpisode.value = metadata?.let {
                 mediaSource.podcastEpisodes.find {
-                    it.id.toString() == metadata.description?.mediaId
+                    it.id == metadata.description?.mediaId
                 }
             }
         }

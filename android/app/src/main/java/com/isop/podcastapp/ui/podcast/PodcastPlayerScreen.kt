@@ -3,7 +3,10 @@ package com.isop.podcastapp.ui.podcast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,10 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,17 +36,13 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
+import com.google.accompanist.insets.systemBarsPadding
 import com.isop.podcastapp.R
-import com.isop.podcastapp.domain.model.Episode
-import com.isop.podcastapp.domain.model.Podcast
+import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.ui.common.EmphasisText
 import com.isop.podcastapp.ui.common.IconButton
 import com.isop.podcastapp.ui.common.PreviewContent
 import com.isop.podcastapp.ui.common.ViewModelProvider
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.insets.systemBarsPadding
-import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -71,7 +68,7 @@ fun PodcastPlayerScreen(backDispatcher: OnBackPressedDispatcher) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PodcastPlayerBody(episode: Item, backDispatcher: OnBackPressedDispatcher) {
+fun PodcastPlayerBody(item: Item, backDispatcher: OnBackPressedDispatcher) {
     val podcastPlayer = ViewModelProvider.podcastPlayer
     val swipeableState = rememberSwipeableState(0)
     val endAnchor = LocalConfiguration.current.screenHeightDp * LocalDensity.current.density
@@ -89,26 +86,9 @@ fun PodcastPlayerBody(episode: Item, backDispatcher: OnBackPressedDispatcher) {
     }
 
     val backgroundColor = MaterialTheme.colors.background
-    var gradientColor by remember {
+    val gradientColor by remember {
         mutableStateOf(backgroundColor)
     }
-
-    val imageRequest = ImageRequest.Builder(LocalContext.current)
-        .data(episode.image)
-        .target {
-            podcastPlayer.calculateColorPalette(it) { color ->
-                gradientColor = color
-            }
-        }
-        .build()
-
-    val imagePainter = rememberImagePainter(
-        data = imageRequest,
-        imageLoader = LocalImageLoader.current,
-        builder = {
-            placeholder(0)
-        }
-    )
 
     val iconResId =
         if (podcastPlayer.podcastIsPlaying) R.drawable.ic_round_pause else R.drawable.ic_round_play_arrow
@@ -137,15 +117,14 @@ fun PodcastPlayerBody(episode: Item, backDispatcher: OnBackPressedDispatcher) {
         }
 
         PodcastPlayerSatelessContent(
-            episode = episode,
-            darkTheme = isSystemInDarkTheme(),
-            imagePainter = imagePainter,
+            item = item,
             gradientColor = gradientColor,
             yOffset = swipeableState.offset.value.roundToInt(),
             playPauseIcon = iconResId,
             playbackProgress = sliderProgress,
             currentTime = podcastPlayer.currentPlaybackFormattedPosition,
             totalTime = podcastPlayer.currentEpisodeFormattedDuration,
+            darkTheme = isSystemInDarkTheme(),
             onRewind = {
                 podcastPlayer.rewind()
             },
@@ -184,8 +163,7 @@ fun PodcastPlayerBody(episode: Item, backDispatcher: OnBackPressedDispatcher) {
 
 @Composable
 fun PodcastPlayerSatelessContent(
-    episode: Item,
-    imagePainter: Painter,
+    item: Item,
     gradientColor: Color,
     yOffset: Int,
     @DrawableRes playPauseIcon: Int,
@@ -260,7 +238,13 @@ fun PodcastPlayerSatelessContent(
                                 .background(MaterialTheme.colors.onBackground.copy(alpha = 0.08f))
                         ) {
                             Image(
-                                painter = imagePainter,
+                                painter = rememberImagePainter(
+                                    data = ViewModelProvider.podcastSearch.getPodcastListContentDetail()?.showLogo,
+                                    imageLoader = LocalImageLoader.current,
+                                    builder = {
+                                        placeholder(0)
+                                    }
+                                ),
                                 contentDescription = stringResource(R.string.podcast_thumbnail),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize(),
@@ -268,7 +252,7 @@ fun PodcastPlayerSatelessContent(
                         }
 
                         Text(
-                            episode.headline,
+                            item.headline,
                             style = MaterialTheme.typography.h5,
                             color = MaterialTheme.colors.onBackground,
                             maxLines = 1,
@@ -276,7 +260,7 @@ fun PodcastPlayerSatelessContent(
                         )
 
                         Text(
-                            episode.headline,
+                            item.headline,
                             style = MaterialTheme.typography.subtitle1,
                             color = MaterialTheme.colors.onBackground,
                             maxLines = 1,
@@ -359,7 +343,7 @@ fun PodcastPlayerSatelessContent(
 fun PodcastPlayerPreview() {
     PreviewContent(darkTheme = true) {
         PodcastPlayerSatelessContent(
-            episode = Item(
+            item = Item(
                 "1",
                 "",
                 "",
@@ -369,10 +353,8 @@ fun PodcastPlayerPreview() {
                 true,
                 "",
                 "",
-                "",
-                "This is a description"
+                ""
             ),
-            imagePainter = painterResource(id = R.drawable.ic_microphone),
             gradientColor = Color.DarkGray,
             yOffset = 0,
             playPauseIcon = R.drawable.ic_round_play_arrow,
@@ -380,12 +362,11 @@ fun PodcastPlayerPreview() {
             currentTime = "0:00",
             totalTime = "10:00",
             darkTheme = true,
-            onClose = { },
-            onForward = { },
             onRewind = { },
+            onForward = { },
             onTooglePlayback = { },
             onSliderChange = { },
             onSliderChangeFinished = { }
-        )
+        ) { }
     }
 }

@@ -14,7 +14,6 @@ import com.isop.podcastapp.constant.Constant
 import com.isop.podcastapp.data.network.model.podcastdetail.Item
 import com.isop.podcastapp.data.service.MediaPlayerService
 import com.isop.podcastapp.data.service.MediaPlayerServiceConnection
-import com.isop.podcastapp.domain.model.Episode
 import com.isop.podcastapp.util.currentPosition
 import com.isop.podcastapp.util.isPlayEnabled
 import com.isop.podcastapp.util.isPlaying
@@ -57,16 +56,16 @@ class PodcastPlayerViewModel @Inject constructor(
     private val currentEpisodeDuration: Long
         get() = MediaPlayerService.currentDuration
 
-    fun playPodcast(episodes: List<Item>, currentEpisode: Item) {
-        serviceConnection.playPodcast(episodes)
-        if (currentEpisode.id.toString() == currentPlayingEpisode.value?.id.toString()) {
+    fun playPodcast(items: List<Item>, item: Item, showLogo: String) {
+        serviceConnection.playPodcast(items, showLogo)
+        if (item.id == currentPlayingEpisode.value?.id.toString()) {
             if (podcastIsPlaying) {
                 serviceConnection.transportControls.pause()
             } else {
                 serviceConnection.transportControls.play()
             }
         } else {
-            serviceConnection.transportControls.playFromMediaId(currentEpisode.id.toString(), null)
+            serviceConnection.transportControls.playFromMediaId(item.id, null)
         }
     }
 

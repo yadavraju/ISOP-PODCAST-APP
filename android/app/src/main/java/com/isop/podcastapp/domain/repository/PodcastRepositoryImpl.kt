@@ -2,7 +2,7 @@ package com.isop.podcastapp.domain.repository
 
 import com.isop.podcastapp.data.datastore.PodcastDataStore
 import com.isop.podcastapp.data.network.model.podcastdetail.PodcastDetail
-import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastListDto
+import com.isop.podcastapp.data.network.model.podcastlist.EspnPodcastList
 import com.isop.podcastapp.data.network.service.EspnPodcastListDetailService
 import com.isop.podcastapp.data.network.service.EspnPodcastService
 import com.isop.podcastapp.data.network.service.PodcastService
@@ -41,7 +41,7 @@ class PodcastRepositoryImpl(
         }
     }
 
-    override suspend fun getPodcastsList(): Either<Failure, EspnPodcastListDto> {
+    override suspend fun getPodcastsList(): Either<Failure, EspnPodcastList> {
         return try {
             val canFetchAPI = dataStore.canFetchAPI()
             if (!canFetchAPI) {
