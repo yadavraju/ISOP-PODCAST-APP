@@ -59,7 +59,7 @@ fun PodcastListDetailScreen(
                         podcastListDetails.data.content.items.forEach { podcast ->
                             PodcastListDetailRowView(
                                 podcast = podcastListDetails.data.content,
-                                item = podcast
+                                post = podcast
                             ) {
                                 openPodcastDetail(navController, podcast)
                             }

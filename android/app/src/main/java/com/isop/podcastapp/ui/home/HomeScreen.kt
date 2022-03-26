@@ -28,7 +28,6 @@ fun HomeScreen() {
     val navController = Navigator.current
     val podcastSearchViewModel = ViewModelProvider.podcastSearch
     val podcastList = podcastSearchViewModel.podcastList
-    Log.e("Raju", "HomeScreen: ")
     Surface {
         LazyColumn(state = scrollState) {
             item {
