@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.isop.podcastapp">
+    package="com.espn.podcastapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name="com.isop.podcastapp.application.PodcastApplication"
+        android:name="com.espn.podcastapp.application.PodcastApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +16,7 @@
         android:theme="@style/Theme.PodcastApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.isop.podcastapp.ui.MainActivity"
+            android:name="com.espn.podcastapp.ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -43,7 +43,7 @@
         </activity>
 
         <service
-            android:name="com.isop.podcastapp.data.service.MediaPlayerService"
+            android:name="com.espn.podcastapp.data.service.MediaPlayerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />

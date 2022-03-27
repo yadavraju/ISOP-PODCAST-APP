@@ -13,7 +13,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.isop.podcastapp"
+        applicationId "com.espn.podcastapp"
         minSdk 26
         targetSdk 30
         versionCode 2

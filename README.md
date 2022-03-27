@@ -2,14 +2,11 @@
 
 Android podcast app made with Jetpack Compose and ExoPlayer.
 
-Podcast information provided by [Listen Notes API](https://www.listennotes.com/).
-
 ## Features
 
 - Jetpack Compose UI. Custom animations, transitions, light/dark theme, and layouts.
 - Jetpack Compose Navigation.
 - Dependency injection with Hilt.
-- MVVM Architecture.
 - Retrieves podcasts metadata from the network.
 - Allows background playback using a foreground service.
 - Media style notifications.
@@ -28,17 +25,10 @@ Podcast information provided by [Listen Notes API](https://www.listennotes.com/)
 - Navigation
 - ViewModel
 - DataStore
-- Palette API
 
 ## Result
 
 ### Dark Mode
-| ![welcome](demo/welcome_dark.png) | ![podcasts](demo/home_dark.png) |![detail](demo/detail_dark.png) |![player](demo/player_dark.png) |
+| ![welcome](demo/s1.png) | ![podcasts](demo/s2.png) |![detailList](demo/s3.png) |![detail](demo/s4.png) |![player](demo/s5.png) |
 |----------|:-------------:|:-------------:|:-------------:|
 
-### Light Mode
-| ![welcome](demo/welcome_light.png) | ![podcasts](demo/home_light.png) |![detail](demo/detail_light.png) |![player](demo/player_light.png) |
-|----------|:-------------:|:-------------:|:-------------:|
-
-### Demo
-![player](demo/listen-notes-demo.gif)
