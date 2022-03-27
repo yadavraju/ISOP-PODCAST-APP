@@ -1,6 +1,6 @@
-# Podcast App
+# ESPN Podcast App
 
-Android podcast app made with Jetpack Compose and ExoPlayer.
+ESPN podcast app made with Jetpack Compose and ExoPlayer.
 
 ## Features
 
@@ -30,5 +30,3 @@ Android podcast app made with Jetpack Compose and ExoPlayer.
 
 ### Dark Mode
 | ![welcome](demo/s1.png) | ![podcasts](demo/s2.png) |![detailList](demo/s3.png) |![detail](demo/s4.png) |![player](demo/s5.png) |
-|----------|:-------------:|:-------------:|:-------------:|
-
